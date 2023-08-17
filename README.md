@@ -13,3 +13,4 @@ Same if you run it via IDE.
 * `CUDNN`
 * `ffmpeg`
 * `OpenCV (4.7.0)`
+* `GraalVM (17.0.7)`
