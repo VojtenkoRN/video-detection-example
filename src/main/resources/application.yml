@@ -1,0 +1,18 @@
+quarkus:
+  log:
+    console:
+      enable: true
+      json: false
+      level: DEBUG
+  native:
+    container-build: false
+
+model:
+  path: ${MODEL_PATH:model/yolov5x.torchscript.zip}
+  name: ${MODEL_NAME:yolov5x.torchscript}
+
+env:
+  debug: false
+
+video:
+  path: examples/example.avi
