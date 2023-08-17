@@ -7,9 +7,9 @@ Same if you run it via IDE.
 
 [libopencv_java470.so](3rdparty%2Flibopencv_java470.so) - OpenCV lib build from src (https://github.com/opencv/opencv)
 
-Requirements:
-Nvidia
-CUDA
-CUDNN
-ffmpeg
-OpenCV (4.7.0)
+# Requirements: 
+* `Nvidia`
+* `CUDA`
+* `CUDNN`
+* `ffmpeg`
+* `OpenCV (4.7.0)`
