@@ -66,6 +66,8 @@ public class YoloPredictorFactory {
               .optTranslator(translator)
               .optEngine(Engine.getDefaultEngineName())
               .optProgress(new ProgressBar())
+              .optArgument("optApplyRatio", true)
+              .optArgument("rescale", true)
               .build();
 
         MODEL = ModelZoo.loadModel(criteria);
