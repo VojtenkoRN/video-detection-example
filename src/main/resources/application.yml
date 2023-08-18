@@ -8,8 +8,8 @@ quarkus:
     container-build: false
 
 model:
-  path: ${MODEL_PATH:model/yolov5x.torchscript.zip}
-  name: ${MODEL_NAME:yolov5x.torchscript}
+  path: ${MODEL_PATH:model/yolov5x.onnx.zip}
+  name: ${MODEL_NAME:yolov5x.onnx}
 
 env:
   debug: false
