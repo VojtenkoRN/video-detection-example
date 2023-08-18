@@ -53,6 +53,8 @@ public class YoloPredictorFactory {
               .setPipeline(pipeline)
               .optSynset(Synset.asNameList())
               .optThreshold(THRESHOLD)
+              .optRescaleSize(IMAGE_SIZE, IMAGE_SIZE)
+              .optApplyRatio(true)
               .optOutputType(YoloV5Translator.YoloOutputType.AUTO)
               .build();
 
@@ -61,13 +63,10 @@ public class YoloPredictorFactory {
               .optModelUrls(modelPath)
               .optModelName(modelName)
               .optDevice(Device.gpu())
-              .optDevice(Device.cpu())
               .optApplication(Application.CV.OBJECT_DETECTION)
               .optTranslator(translator)
               .optEngine(Engine.getDefaultEngineName())
               .optProgress(new ProgressBar())
-              .optArgument("optApplyRatio", true)
-              .optArgument("rescale", true)
               .build();
 
         MODEL = ModelZoo.loadModel(criteria);
