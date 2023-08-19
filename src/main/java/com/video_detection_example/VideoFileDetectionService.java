@@ -54,7 +54,7 @@ public class VideoFileDetectionService {
                     List<DetectedObjects.DetectedObject> allItems = predict.items();
                     var filteredItems = allItems.stream()
                           .filter(detected -> FILTER.contains(detected.getClassName()))
-                          .filter(detected -> detected.getProbability() > 0.8d)
+                          .filter(detected -> detected.getProbability() > 0.55d)
                           .toList();
 
                     image.drawBoundingBoxes(convert(filteredItems));
@@ -64,8 +64,8 @@ public class VideoFileDetectionService {
                     byte[] data = output.toByteArray();
                     ByteArrayInputStream input = new ByteArrayInputStream(data);
                     BufferedImage img = ImageIO.read(input);
-                    ImageIcon vidpanelImage = new ImageIcon(img);
-                    videoPanel.setIcon(vidpanelImage);
+                    ImageIcon videoPanelImage = new ImageIcon(img);
+                    videoPanel.setIcon(videoPanelImage);
                     videoPanel.repaint();
                 }
             }

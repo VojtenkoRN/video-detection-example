@@ -7,16 +7,12 @@ import ai.djl.engine.Engine;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.modality.cv.transform.Resize;
-import ai.djl.modality.cv.transform.ToTensor;
-import ai.djl.modality.cv.translator.YoloV5Translator;
+import ai.djl.modality.cv.translator.YoloV5TranslatorFactory;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
-import ai.djl.translate.Pipeline;
-import ai.djl.translate.Translator;
 import io.quarkus.runtime.Startup;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -28,8 +24,8 @@ import java.io.IOException;
 @Singleton
 public class YoloPredictorFactory {
 
-    private static final int IMAGE_SIZE = 640;
-    private static final float THRESHOLD = 0.5f;
+    private static final String IMAGE_SIZE = "640";
+    private static final String THRESHOLD = "0.5";
     @ConfigProperty(name = "model.path")
     String modelPath;
     @ConfigProperty(name = "model.name")
@@ -44,28 +40,21 @@ public class YoloPredictorFactory {
             Engine.debugEnvironment();
         }
 
-        Pipeline pipeline = new Pipeline()
-              .add(new Resize(IMAGE_SIZE))
-              .add(new ToTensor());
-
-        Translator<Image, DetectedObjects> translator = YoloV5Translator
-              .builder()
-              .setPipeline(pipeline)
-              .optSynset(Synset.asNameList())
-              .optThreshold(THRESHOLD)
-              .optRescaleSize(IMAGE_SIZE, IMAGE_SIZE)
-              .optApplyRatio(true)
-              .optOutputType(YoloV5Translator.YoloOutputType.AUTO)
-              .build();
-
         Criteria<Image, DetectedObjects> criteria = Criteria.builder()
               .setTypes(Image.class, DetectedObjects.class)
               .optModelUrls(modelPath)
               .optModelName(modelName)
               .optDevice(Device.gpu())
               .optApplication(Application.CV.OBJECT_DETECTION)
-              .optTranslator(translator)
               .optEngine(Engine.getDefaultEngineName())
+              .optArgument("width", IMAGE_SIZE)
+              .optArgument("height", IMAGE_SIZE)
+              .optArgument("resize", "true")
+              .optArgument("rescale", "true")
+              .optArgument("optApplyRatio", "true")
+              .optArgument("threshold", THRESHOLD)
+              .optArgument("synset", Synset.asString())
+              .optTranslatorFactory(new YoloV5TranslatorFactory())
               .optProgress(new ProgressBar())
               .build();
 

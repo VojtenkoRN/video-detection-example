@@ -1,8 +1,8 @@
 package com.video_detection_example;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * All ms coco classnames
@@ -100,8 +100,11 @@ public final class Synset {
         throw new UnsupportedOperationException("Class instance creation is unsupported");
     }
 
-    public static List<String> asNameList() {
-        return new ArrayList<>(SYNSET.stream().map(SynsetClass::name).toList());
+    public static String asString() {
+        return SYNSET.stream()
+              .sorted(Comparator.comparing(SynsetClass::num))
+              .map(SynsetClass::name)
+              .collect(Collectors.joining(","));
     }
 
     private record SynsetClass(int num, String name) {
