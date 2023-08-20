@@ -10,6 +10,7 @@ quarkus:
 model:
   path: ${MODEL_PATH:model/yolov5x6.torchscript.zip}
   name: ${MODEL_NAME:yolov5x6.torchscript}
+  synset: ${SYNSET_PATH:model/synset.txt}
 
 env:
   debug: false

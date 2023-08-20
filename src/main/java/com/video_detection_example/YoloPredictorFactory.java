@@ -19,6 +19,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.nio.file.Path;
 
 @Startup
 @Singleton
@@ -30,15 +31,19 @@ public class YoloPredictorFactory {
     String modelPath;
     @ConfigProperty(name = "model.name")
     String modelName;
-    @ConfigProperty(name = "env.debug")
-    boolean debug;
+    @ConfigProperty(name = "model.synset")
+    String synsetPath;
+    @ConfigProperty(name = "env.show-info")
+    boolean showInfo;
     private ZooModel<Image, DetectedObjects> MODEL;
 
     @PostConstruct
     private void initModel() throws ModelNotFoundException, MalformedModelException, IOException {
-        if (debug) {
+        if (showInfo) {
             Engine.debugEnvironment();
         }
+
+        final var synsetUrl = Path.of(synsetPath).toUri().toString();
 
         Criteria<Image, DetectedObjects> criteria = Criteria.builder()
               .setTypes(Image.class, DetectedObjects.class)
@@ -53,7 +58,7 @@ public class YoloPredictorFactory {
               .optArgument("rescale", "true")
               .optArgument("optApplyRatio", "true")
               .optArgument("threshold", THRESHOLD)
-              .optArgument("synset", Synset.asString())
+              .optArgument("synsetUrl", synsetUrl)
               .optTranslatorFactory(new YoloV5TranslatorFactory())
               .optProgress(new ProgressBar())
               .build();
